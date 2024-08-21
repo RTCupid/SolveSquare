@@ -67,13 +67,13 @@ int SolveSquare (double a, double b, double c, double *x1, double *x2)  // ре�
     else if (a == 0 && b == 0)
         return 0;
 
-    else if (a == 0 || c == 0 && a != c)       // если преобразуется в линейное уравнение
+    else if (a == 0)       // если преобразуется в линейное уравнение
         {
         SolveLine (a, b, c, x1);
         return 1;
         }
 
-    else if (a == 0 && c == 0)
+    else if ((a == 0 or b == 0) && c == 0)
         {
         *x1 = 0;
         return 1;
@@ -177,7 +177,10 @@ int CheckTest (int nTest, double a,double b, double c, double x1Correct, double 
             }
         }
 
-    if (($(isnan (x1)) && $(x2) != x2Correct) ||
+    if (isnan (x1) && isnan (x2) && nansw == nanswCorrect)
+        ;
+
+    else if ((isnan (x1) && x2 != x2Correct) ||
         (isnan (x2) && x1 != x1Correct) ||
         (nansw != nanswCorrect))
         {
@@ -188,7 +191,7 @@ int CheckTest (int nTest, double a,double b, double c, double x1Correct, double 
                     nTest, a, b, c, x1, x2, nansw,
                     x1Correct, x2Correct, nanswCorrect);
 
-                    $(*prov) = 0;
+                    *prov = 0;
 
         txSetConsoleAttr (0x07);
         }
@@ -208,38 +211,37 @@ void RunTests ()
         int prov = 1;
 
         int nTest = 0;
-        double a = 0, b = 0, c = 0, x1Correct = NAN, x2Correct = NAN, nanswCorrect = 8;
         CheckTest (nTest, 0, 0, 0, NAN, NAN, 8, &prov);
 
-        nTest = 1, a = 0, b = 0, c = 1, x1Correct = NAN, x2Correct = NAN, nanswCorrect = 0;
-        CheckTest (nTest, a, b, c, x1Correct, x2Correct, nanswCorrect, &prov);
+        nTest = 1;
+        CheckTest (nTest, 0, 0, 1, NAN, NAN, 0, &prov);
 
-        nTest = 2, a = 0, b = 1, c = 0, x1Correct = 0; x2Correct = NAN, nanswCorrect = 1;
-        CheckTest (nTest, a, b, c, x1Correct, x2Correct, nanswCorrect, &prov);
+        nTest = 2;
+        CheckTest (nTest, 0, 1, 0, 0, NAN, 1, &prov);
 
-        nTest = 3, a = 0, b = 1, c = 1, x1Correct = -1, x2Correct = NAN, nanswCorrect = 1;
-        CheckTest (nTest, a, b, c, x1Correct, x2Correct, nanswCorrect, &prov);
+        nTest = 3;
+        CheckTest (nTest, 0, 1, 1, -1, NAN, 1, &prov);
 
-        nTest = 4, a = 1, b = 0, c = 0, x1Correct = 0, x2Correct = NAN, nanswCorrect = 1;
-        CheckTest (nTest, a, b, c, x1Correct, x2Correct, nanswCorrect, &prov);
+        nTest = 4;
+        CheckTest (nTest, 1, 0, 0, 0, NAN, 1, &prov);
 
-        nTest = 5, a = 1, b = 0, c = 1, x1Correct = NAN, x2Correct = NAN, nanswCorrect = 0;
-        CheckTest (nTest, a, b, c, x1Correct, x2Correct, nanswCorrect, &prov);
+        nTest = 5;
+        CheckTest (nTest, 1, 0, 1, NAN, NAN, 0, &prov);
 
-        nTest = 6, a = 1, b = 1, c = 0, x1Correct = -1, x2Correct = 0, nanswCorrect = 2;
-        CheckTest (nTest, a, b, c, x1Correct, x2Correct, nanswCorrect, &prov);
+        nTest = 6;
+        CheckTest (nTest, 1, 1, 0, -1, 0, 2, &prov);
 
-        nTest = 7, a = 1, b = 1, c = 1, x1Correct = NAN, x2Correct = NAN, nanswCorrect = 0;
-        CheckTest (nTest, a, b, c, x1Correct, x2Correct, nanswCorrect, &prov);
+        nTest = 7;
+        CheckTest (nTest, 1, 1, 1, NAN, NAN, 0, &prov);
 
-        nTest = 8, a = 5, b = 7, c = 2, x1Correct = -1, x2Correct = -0.4, nanswCorrect = 2;
-        CheckTest (nTest, a, b, c, x1Correct, x2Correct, nanswCorrect, &prov);
+        nTest = 8;
+        CheckTest (nTest, 5, 7, 2, -1, -0.4, 2, &prov);
 
-        nTest = 9, a = 2.5, b = 7, c = 4, x1Correct = -2, x2Correct = -0.8, nanswCorrect = 2;
-        CheckTest (nTest, a, b, c, x1Correct, x2Correct, nanswCorrect, &prov);
+        nTest = 9;
+        CheckTest (nTest, 2.5, 7, 4, -2, -0.8, 2, &prov);
 
-        nTest = 10, a = 5, b = -7, c = 2, x1Correct = 0.4, x2Correct = 1, nanswCorrect = 2;
-        CheckTest (nTest, a, b, c, x1Correct, x2Correct, nanswCorrect, &prov);
+        nTest = 10;
+        CheckTest (nTest, 5, -7, 2, 0.4, 1, 2, &prov);
 
         if (prov == 1)
             printf("Проверка пройдена успешно\n\n");
