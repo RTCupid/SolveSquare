@@ -1,0 +1,45 @@
+
+--------------------------------------------------
+TXLib соболезнует...
+
+Программа: C:\Users\Admin\DOCUMENTS\SolveSquare\SolveSquare.exe, файл: C:\Users\Admin\DOCUMENTS\SolveSquare\SolveSquare.cpp, строка: 139, функция: void input(double*, double*, double*),
+
+Сообщение: ВНЕЗАПНО: Логическая ошибка: Неверно, что "kol == 3".
+
+#1: TXLib [Ver: 00173a, Rev: 172, Date: 2023-11-06 23:00:00 +0400], Instance: 0x005072FC (32-bit), Flags: Cmdre0, Thread: 0x5FE4 (Main). 
+
+--------------------------------------------------
+Стек вызовов:
+
+# 0 0x0042C6EF in C:\Users\Admin\DOCUMENTS\SolveSquare\SolveSquare.exe: input() at C:/Users/Admin/DOCUMENTS/SolveSquare/SolveSquare.cpp (139):
+
+    137:         }
+    138: 
+=>  139:     assert (kol == 3);                          // неправильный формат входных данных
+    140:     }
+    141: 
+
+# 1 0x0042C28D in C:\Users\Admin\DOCUMENTS\SolveSquare\SolveSquare.exe: main() at C:/Users/Admin/DOCUMENTS/SolveSquare/SolveSquare.cpp (28):
+
+     26: 
+     27:     double a = NAN, b = NAN, c = NAN;
+=>   28:     input (&a, &b, &c);       // функция написана
+     29: 
+     30:     double x1 = NAN, x2 = NAN;                  // решения квадратного уравнения
+
+--------------------------------------------------
+Developed with:
+
+The Dumb Artist Library (TX Library)
+TXLib [Ver: 00173a, Rev: 172, Date: 2023-11-06 23:00:00 +0400]
+Copyright (C) Ded (Ilya Dedinsky, http://txlib.ru) <mail@txlib.ru>
+See license on: http://txlib.ru
+
+TXLib file:	C:\Users\Admin\DESKTOP\TX\TXLib.h
+Compiled:	Aug 21 2024 18:58:05, GNU g++ 4.8.1, std=201103L, MinGW Runtime 3.20, 32-bit, DEBUG
+Started:	Aug 21 2024 18:58:08
+
+Run file:	C:\Users\Admin\DOCUMENTS\SolveSquare\SolveSquare.exe
+Directory:	C:\Users\Admin\DOCUMENTS\SolveSquare
+
+--------------------------------------------------
