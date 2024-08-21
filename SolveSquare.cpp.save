@@ -7,7 +7,7 @@ int SolveSquare (double a, double b, double c,  // коэффициенты
 void SolveLine (double a, double b, double c,
                 double *x1);
 
-void input (double *a, double *b, double *c); //todo rename
+void Input (double *a, double *b, double *c);   //todo rename (сделано)
 
 void CleanBuf ();
 
@@ -20,12 +20,12 @@ int main ()
     printf ("# Эта программа решает квадратные уравнения\n");
     printf ("# (с) RTCupid, 2024\n");
 
-    RunTests ();                           // программа запускает тесты и проверяет их
+    RunTests ();                                // программа запускает тесты и проверяет их
 
     printf ("# Введите a, b, c\n");
 
     double a = NAN, b = NAN, c = NAN;
-    input (&a, &b, &c);       // функция написана
+    Input (&a, &b, &c);                         // функция написана
 
     double x1 = NAN, x2 = NAN;                  // решения квадратного уравнения
 
@@ -61,13 +61,13 @@ int SolveSquare (double a, double b, double c, double *x1, double *x2)  // ре�
     assert (std: !isNAN (b));
     assert (std: !isNAN (c));*/
 
-    if (a == 0 && b == 0 && c == 0)           // все коэф==0, беск кол-во решений
-        return 8;  // magick: rotated infinity
+    if (a == 0 && b == 0 && c == 0)             // все коэф==0, беск кол-во решений
+        return 8;                               // magick: rotated infinity
 
     else if (a == 0 && b == 0)
         return 0;
 
-    else if (a == 0)       // если преобразуется в линейное уравнение
+    else if (a == 0)                            // если преобразуется в линейное уравнение
         {
         SolveLine (a, b, c, x1);
         return 1;
@@ -80,13 +80,13 @@ int SolveSquare (double a, double b, double c, double *x1, double *x2)  // ре�
         }
     else                                        // норм квадратное
         {
-        float d = b*b - 4*a*c;                  // d = дискриминант
+        double d = (b * b) - (4 * a * c);       // d = дискриминант
         if (d < 0)                              // дискриминант < 0, нет решений
             return 0;
 
         else if (d == 0)                        // дискриминант = 0, одно решение
             {
-            *x1 = -b/(2*a);
+            *x1 = -b / (2 * a);
             return 1;
             }
 
@@ -94,8 +94,8 @@ int SolveSquare (double a, double b, double c, double *x1, double *x2)  // ре�
             {
             double s = sqrt (d);                // s = корень из дискриминанта
 
-            *x1 = (-b - s) / (2*a);
-            *x2 = (-b + s) / (2*a);
+            *x1 = (-b - s) / (2 * a);
+            *x2 = (-b + s) / (2 * a);
             return 2;
             }
         }
@@ -106,14 +106,14 @@ int SolveSquare (double a, double b, double c, double *x1, double *x2)  // ре�
 void SolveLine (double a, double b, double c, double *x1)
     {
     if (a == 0)
-        *x1 = -c/b;
+        *x1 = -c / b;
     else                                        // с == 0
-        *x1 = -b/a;
+        *x1 = -b / a;
     }
 
 // функция ввода.....................................................................................
 
-void input (double *a, double *b, double *c)
+void Input (double *a, double *b, double *c)
     {
     int kol = scanf ("%lg %lg %lg", a, b, c);   // kol считает количество введённых чисел
 
@@ -211,7 +211,7 @@ void RunTests ()
         int prov = 1;
 
         int nTest = -1;
-        
+
         nTest = 0;
         CheckTest (nTest, 0, 0, 0, NAN, NAN, 8, &prov);
 
