@@ -1,42 +1,48 @@
 #include <stdio.h>
 #include <TXLib.h>
 
-int SolveSquare (double a, double b, double c,  // РєРѕСЌС„С„РёС†РёРµРЅС‚С‹
-                 double *x1, double *x2);       // Р°РґСЂРµСЃР° РґР»СЏ СЂРµС€РµРЅРёР№
+#define Accuracy 1e-08                          // точность округления до нуля
 
-void SolveLine (double a, double b, double c,
-                double *x1);
+int SolveSquare (double a, double b, double c,  // коэффициенты
+                 double *x1, double *x2);       // адреса для решений
 
-void Input (double *a, double *b, double *c); //todo rename (СЃРґРµР»Р°РЅРѕ)
+int Input (double *a, double *b, double *c);    // функция ввода
 
-void CleanBuf ();
+void CleanBuf ();                               // функция очистки буфера
 
-int CheckTest (int nTest, double a, double b, double c, double x1Correct, double x2Correct, int nanswCorrect );
+void RunTests ();                               // функция для прогонки тестов
 
-void RunTests ();
+void CheckTest (int nTest, double a, double b, double c, double x1Correct, double x2Correct, int nanswCorrect, int *prov); // функция проверки теста
+
+int CloseZero (double a);                       // функция для сравнения с нулём
+
+int Compare (double a, double b);               // функция для сравнений двух чисел с точностью Accuracy
 
 int main ()
     {
-    printf ("# Р­С‚Р° РїСЂРѕРіСЂР°РјРјР° СЂРµС€Р°РµС‚ РєРІР°РґСЂР°С‚РЅС‹Рµ СѓСЂР°РІРЅРµРЅРёСЏ\n");
-    printf ("# (СЃ) RTCupid, 2024\n");
+    printf ("# Program for Solve Square equation\n");
+    printf ("# (с) RTCupid, 2024\n");
 
-    RunTests ();                           // РїСЂРѕРіСЂР°РјРјР° Р·Р°РїСѓСЃРєР°РµС‚ С‚РµСЃС‚С‹ Рё РїСЂРѕРІРµСЂСЏРµС‚ РёС…
+    RunTests ();                                // программа запускает тесты и проверяет их
 
-    printf ("# Р’РІРµРґРёС‚Рµ a, b, c\n");
+    printf ("# Enter a, b, c\n");
 
     double a = NAN, b = NAN, c = NAN;
-    Input (&a, &b, &c);       // С„СѓРЅРєС†РёСЏ РЅР°РїРёСЃР°РЅР°
+    int inpTrue = Input (&a, &b, &c);           // функция написана
 
-    double x1 = NAN, x2 = NAN;                  // СЂРµС€РµРЅРёСЏ РєРІР°РґСЂР°С‚РЅРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ
+    if (inpTrue == 0)
+        return 0;
 
-    int answ = SolveSquare (a, b, c, &x1, &x2); // answ СЃС‡РёС‚Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕСЂРЅРµР№
+    double x1 = NAN, x2 = NAN;                  // решения квадратного уравнения
 
-    //assert (std:(!isNAN (x1)));               // РІС‹РґР°СЃС‚ РѕС€РёР±РєСѓ, РµСЃР»Рё Р·РЅР°С‡РµРЅРёРµ x1 РЅРµ РЅР°Р·РЅР°С‡Р°РµС‚СЃСЏ
+    int answ = SolveSquare (a, b, c, &x1, &x2); // answ считает количество корней
 
-    switch (answ)                               // РІС‹РІРѕР¶Сѓ РѕС‚РІРµС‚ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РєРѕР»РёС‡РµСЃС‚РІР° СЂРµС€РµРЅРёР№
+    //assert (std:(!isNAN (x1)));               // выдаст ошибку, если значение x1 не назначается
+
+    switch (answ)                               // вывожу ответ в зависимости от количества решений
         {
         case 0:
-            printf ("РЅРµС‚ СЂРµС€РµРЅРёР№");
+            printf ("No solutions");
             break;
         case 1:
             printf ("x = %lg", x1);
@@ -44,55 +50,56 @@ int main ()
         case 2:
             printf ("x1 = %lg, x2 = %lg", x1, x2);
             break;
-        case 8: // РІР°СЂРёР°РЅС‚: Р±РµСЃРєРѕРЅРµС‡РЅРѕРµ РєРѕР»-РІРѕ СЂРµС€РµРЅРёР№, Р±РµСЃРєРѕРЅРµС‡РЅРѕСЃС‚СЊ = 8 РїРѕРІРµСЂРЅСѓС‚СЊ РЅР° 90 РіСЂР°РґСѓСЃРѕРІ
-            printf ("x = Р»СЋР±РѕРµ С‡РёСЃР»Рѕ");
+        case 8: // вариант: бесконечное кол-во решений, бесконечность = 8 повернуть на 90 градусов
+            printf ("x = Any number");
             break;
         default:
             printf("answ = %d", answ);
         }
+    return 0;
     }
 
-// С„СѓРЅРєС†РёСЏ РєРІР°РґСЂР°С‚РЅРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ.....................................................................
+// функция квадратного уравнения.....................................................................
 
-int SolveSquare (double a, double b, double c, double *x1, double *x2)  // СЂРµС€РµРЅРёРµ РєРІР°РґСЂР°С‚РєРё
+int SolveSquare (double a, double b, double c, double *x1, double *x2)  // решение квадратки
     {
     assert (x1 != x2);
     /*assert (std: !isNAN (a));
     assert (std: !isNAN (b));
     assert (std: !isNAN (c));*/
 
-    if (a == 0 && b == 0 && c == 0)           // РІСЃРµ РєРѕСЌС„==0, Р±РµСЃРє РєРѕР»-РІРѕ СЂРµС€РµРЅРёР№
-        return 8;  // magick: rotated infinity
+    if (CloseZero(a) && CloseZero(b) && CloseZero(c))    // все коэф==0, беск кол-во решений
+        return 8;                                        // magick: rotated infinity
 
-    else if (a == 0 && b == 0)
+    else if (CloseZero(a) && CloseZero(b))
         return 0;
 
-    else if (a == 0)       // РµСЃР»Рё РїСЂРµРѕР±СЂР°Р·СѓРµС‚СЃСЏ РІ Р»РёРЅРµР№РЅРѕРµ СѓСЂР°РІРЅРµРЅРёРµ
+    else if (CloseZero(a))                               // если преобразуется в линейное уравнение
         {
-        SolveLine (a, b, c, x1);
+        *x1 = -c / b;;
         return 1;
         }
 
-    else if ((a == 0 or b == 0) && c == 0)
+    else if ((CloseZero(a) or CloseZero(b)) && CloseZero(c))
         {
         *x1 = 0;
         return 1;
         }
-    else                                        // РЅРѕСЂРј РєРІР°РґСЂР°С‚РЅРѕРµ
+    else                                        // норм квадратное
         {
-        double d = (b * b) - (4 * a * c);                  // d = РґРёСЃРєСЂРёРјРёРЅР°РЅС‚
-        if (d < 0)                              // РґРёСЃРєСЂРёРјРёРЅР°РЅС‚ < 0, РЅРµС‚ СЂРµС€РµРЅРёР№
+        double d = (b * b) - (4 * a * c);       // d = дискриминант
+        if (d < 0)                              // дискриминант < 0, нет решений
             return 0;
 
-        else if (d == 0)                        // РґРёСЃРєСЂРёРјРёРЅР°РЅС‚ = 0, РѕРґРЅРѕ СЂРµС€РµРЅРёРµ
+        else if (CloseZero(d))                        // дискриминант = 0, одно решение
             {
             *x1 = -b / (2 * a);
             return 1;
             }
 
-        else                                    // РІСЃС‘ РЅРѕСЂРј, РґРІР° РєРѕСЂРЅСЏ
+        else                                    // всё норм, два корня
             {
-            double s = sqrt (d);                // s = РєРѕСЂРµРЅСЊ РёР· РґРёСЃРєСЂРёРјРёРЅР°РЅС‚Р°
+            double s = sqrt (d);                // s = корень из дискриминанта
 
             *x1 = (-b - s) / (2 * a);
             *x2 = (-b + s) / (2 * a);
@@ -101,45 +108,38 @@ int SolveSquare (double a, double b, double c, double *x1, double *x2)  // СЂРµС
         }
     }
 
-// С„СѓРЅРєС†РёСЏ Р»РёРЅРµР№РЅРѕРіРѕ СѓСЂР°РІРЅРµРЅРёСЏ.......................................................................
+// функция ввода.....................................................................................
 
-void SolveLine (double a, double b, double c, double *x1)
+int Input (double *a, double *b, double *c)
     {
-    if (a == 0)
-        *x1 = -c / b;
-    else                                        // СЃ == 0
-        *x1 = -b / a;
-    }
-
-// С„СѓРЅРєС†РёСЏ РІРІРѕРґР°.....................................................................................
-
-void Input (double *a, double *b, double *c)
-    {
-    int kol = scanf ("%lg %lg %lg", a, b, c);   // kol СЃС‡РёС‚Р°РµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ РІРІРµРґС‘РЅРЅС‹С… С‡РёСЃРµР»
+    int kol = scanf ("%lg %lg %lg", a, b, c);   // kol считает количество введённых чисел
 
     int nTries = 2;
     while (kol != 3)
         {
         if (nTries == 0)
             {
-            printf ("РџСЂРµРІС‹С€РµРЅРѕ РєРѕР»РёС‡РµСЃС‚РІРѕ РїРѕРїС‹С‚РѕРє!\n");
-            printf ("РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ РІРІРѕРґ");
+            printf ("Number of attempts exceeded!\n");
+            printf ("Incorrect input!");
             break;
             }
         CleanBuf ();
 
-        printf ("РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ РІРІРѕРґР°!\n");
-        printf ("Р’РІРµРґРёС‚Рµ С‚СЂРё С‡РёСЃР»Р°, РёСЃРїРѕР»СЊР·СѓСЏ С†РёС„СЂС‹ РЅР° РєР»Р°РІРёР°С‚СѓСЂРµ\n");
-        printf ("РѕСЃС‚Р°Р»РѕСЃСЊ %d РїРѕРїС‹С‚РєРё\n", nTries);
+        printf ("Invalid input format!\n");
+        printf ("Enter three numbers using the numbers on the keyboard\n");
+        printf ("%d attempts left\n", nTries);
 
         kol = scanf ("%lg %lg %lg", a, b, c);
         nTries--;
         }
 
-    assert (kol == 3);                          // РЅРµРїСЂР°РІРёР»СЊРЅС‹Р№ С„РѕСЂРјР°С‚ РІС…РѕРґРЅС‹С… РґР°РЅРЅС‹С…
+    if (kol != 3)
+        return 0;
+    else
+        return 1;                               // неправильный формат входных данных
     }
 
-// С„СѓРЅРєС†РёСЏ РѕС‡РёСЃС‚РєРё Р±СѓС„С„РµСЂР°...........................................................................
+// функция очистки буффера...........................................................................
 
 void CleanBuf ()
     {
@@ -153,16 +153,94 @@ void CleanBuf ()
         }
     }
 
-// С„СѓРЅРєС†РёСЏ, РєРѕС‚РѕСЂР°СЏ РїСЂРѕРІРµСЂСЏРµС‚ РѕРґРёРЅ С‚РµСЃС‚..............................................................
+// функция, которая запускает проверку тестов с разными входными данными.............................
 
-int CheckTest (int nTest, double a,double b, double c, double x1Correct, double x2Correct, int nanswCorrect, int *prov)
+void RunTests ()
+    {
+
+    int prov = 1;
+
+    int nTest = -1;
+
+    nTest = 0;
+    CheckTest (nTest, 0, 0, 0, NAN, NAN, 8, &prov);
+
+    nTest = 1;
+    CheckTest (nTest, 0, 0, 1, NAN, NAN, 0, &prov);
+
+    nTest = 2;
+    CheckTest (nTest, 0, 1, 0, 0, NAN, 1, &prov);
+
+    nTest = 3;
+    CheckTest (nTest, 0, 1, 1, -1, NAN, 1, &prov);
+
+    nTest = 4;
+    CheckTest (nTest, 1, 0, 0, 0, NAN, 1, &prov);
+
+    nTest = 5;
+    CheckTest (nTest, 1, 0, 1, NAN, NAN, 0, &prov);
+
+    nTest = 6;
+    CheckTest (nTest, 1, 1, 0, -1, 0, 2, &prov);
+
+    nTest = 7;
+    CheckTest (nTest, 1, 1, 1, NAN, NAN, 0, &prov);
+
+    nTest = 8;
+    CheckTest (nTest, 5, 7, 2, -1, -0.4, 2, &prov);
+
+    nTest = 9;
+    CheckTest (nTest, 2.5, 7, 4, -2, -0.8, 2, &prov);
+
+    nTest = 10;
+    CheckTest (nTest, 5, -7, 2, 0.4, 1, 2, &prov);
+
+    nTest = 11;
+    CheckTest (nTest, 0.0000000000000000001, 1, -2, 2, NAN, 1, &prov);
+
+    if (prov == 1)
+        printf("Verification completed successfully!\n\n");
+    //assert (prov == 1);
+    }
+
+/*   Runtest версия Деда (более компактно и понятно)
+void RunTests ()
+        {
+
+        int prov = 1;
+
+        double n = NAN;
+
+        CheckTest ( 0, 0,    0, 0,  n,   n,   8, &prov);
+        CheckTest ( 1, 0,    0, 1,  n,   n,   0, &prov);
+        CheckTest ( 2, 0,    1, 0,  0,   n,   1, &prov);
+        CheckTest ( 3, 0,    1, 1, -1,   n,   1, &prov);
+        CheckTest ( 4, 1,    0, 0,  0,   n,   1, &prov);
+        CheckTest ( 5, 1,    0, 1,  n,   n,   0, &prov);
+        CheckTest ( 6, 1,    1, 0, -1,   0,   2, &prov);
+        CheckTest ( 7, 1,    1, 1,  n,   n,   0, &prov);
+        CheckTest ( 8, 5,    7, 2, -1,  -0.4, 2, &prov);
+        CheckTest ( 9, 2.5,  7, 4, -2,  -0.8, 2, &prov);
+        CheckTest (10, 5,   -7, 2,  0.4, 1,   2, &prov);
+        CheckTest (11, 0.0000000000000000001, 1, -2, 2, NAN, 1, &prov);
+
+        if (prov == 1)
+            printf("Verification completed successfully!\n\n");
+        //assert (prov == 1);
+        }
+
+*/
+
+// функция, которая проверяет один тест..............................................................
+
+void CheckTest (int nTest, double a,double b, double c, double x1Correct, double x2Correct, int nanswCorrect, int *prov)
     {
     double x1 = NAN, x2 = NAN;
     int nansw = SolveSquare (a, b, c, &x1, &x2);
 
     if (!isnan (x1) && !isnan (x2))
         {
-        if (nansw != nanswCorrect || x1 != x1Correct || x2 != x2Correct)
+        if (!Compare (nansw, nanswCorrect) || !Compare(x1, x1Correct) || !Compare (x2, x2Correct))
             {
             txSetConsoleAttr (0x0E);
 
@@ -177,12 +255,12 @@ int CheckTest (int nTest, double a,double b, double c, double x1Correct, double 
             }
         }
 
-    if (isnan (x1) && isnan (x2) && nansw == nanswCorrect)
+    if (isnan (x1) && isnan (x2) && Compare (nansw, nanswCorrect))
         ;
 
-    else if ((isnan (x1) && x2 != x2Correct) ||
-        (isnan (x2) && x1 != x1Correct) ||
-        (nansw != nanswCorrect))
+    else if ((isnan (x1) && !Compare (x2, x2Correct)) ||
+             (isnan (x2) && !Compare (x1, x1Correct)) ||
+             (!Compare (nansw, nanswCorrect)))
         {
         txSetConsoleAttr (0x4E);
 
@@ -197,81 +275,31 @@ int CheckTest (int nTest, double a,double b, double c, double x1Correct, double 
         }
     }
 
+// функция обнуляет очень близкие к нулю значения....................................................
+
+int CloseZero (double a)
+    {
+    double epsilonPoz =  Accuracy;
+    double epsilonNeg = -Accuracy;
+
+    if ((a < epsilonPoz) && (a > epsilonNeg))
+
+        return 1;
+    else
+        return 0;
+    }
+
+// функция, которая сравнивает два числа с определённой точностью....................................
+
+int Compare (double a, double b)
+    {
+    if (a - b >= Accuracy)
+        return 0;
+    else
+        return 1;
+    }
 
 
 
 
 
-
-// С„СѓРЅРєС†РёСЏ, РєРѕС‚РѕСЂР°СЏ Р·Р°РїСѓСЃРєР°РµС‚ РїСЂРѕРІРµСЂРєСѓ С‚РµСЃС‚РѕРІ СЃ СЂР°Р·РЅС‹РјРё РІС…РѕРґРЅС‹РјРё РґР°РЅРЅС‹РјРё.............................
-
-void RunTests ()
-        {
-
-        int prov = 1;
-
-        int nTest = -1;
-
-        nTest = 0;
-        CheckTest (nTest, 0, 0, 0, NAN, NAN, 8, &prov);
-
-        nTest = 1;
-        CheckTest (nTest, 0, 0, 1, NAN, NAN, 0, &prov);
-
-        nTest = 2;
-        CheckTest (nTest, 0, 1, 0, 0, NAN, 1, &prov);
-
-        nTest = 3;
-        CheckTest (nTest, 0, 1, 1, -1, NAN, 1, &prov);
-
-        nTest = 4;
-        CheckTest (nTest, 1, 0, 0, 0, NAN, 1, &prov);
-
-        nTest = 5;
-        CheckTest (nTest, 1, 0, 1, NAN, NAN, 0, &prov);
-
-        nTest = 6;
-        CheckTest (nTest, 1, 1, 0, -1, 0, 2, &prov);
-
-        nTest = 7;
-        CheckTest (nTest, 1, 1, 1, NAN, NAN, 0, &prov);
-
-        nTest = 8;
-        CheckTest (nTest, 5, 7, 2, -1, -0.4, 2, &prov);
-
-        nTest = 9;
-        CheckTest (nTest, 2.5, 7, 4, -2, -0.8, 2, &prov);
-
-        nTest = 10;
-        CheckTest (nTest, 5, -7, 2, 0.4, 1, 2, &prov);
-
-        if (prov == 1)
-            printf("РџСЂРѕРІРµСЂРєР° РїСЂРѕР№РґРµРЅР° СѓСЃРїРµС€РЅРѕ!\n\n");
-        //assert (prov == 1);
-        }
-/*
-void RunTests ()
-        {
-
-        int prov = 1;
-
-        double n = NAN;
-
-        CheckTest ( 1, 0,    0, 0,  n,   n,   8, &prov);
-        CheckTest ( 2, 0,    0, 1,  n,   n,   0, &prov);
-        CheckTest ( 3, 0,    1, 0,  0,   n,   1, &prov);
-        CheckTest ( 4, 0,    1, 1, -1,   n,   1, &prov);
-        CheckTest ( 5, 1,    0, 0,  0,   n,   1, &prov);
-        CheckTest ( 6, 1,    0, 1,  n,   n,   0, &prov);
-        CheckTest ( 7, 1,    1, 0, -1,   0,   2, &prov);
-        CheckTest ( 8, 1,    1, 1,  n,   n,   0, &prov);
-        CheckTest ( 9, 5,    7, 2, -1,  -0.4, 2, &prov);
-        CheckTest (10, 2.5,  7, 4, -2,  -0.8, 2, &prov);
-        CheckTest (11, 5,   -7, 2,  0.4, 1,   2, &prov);
-
-        if (prov == 1)
-            printf("РџСЂРѕРІРµСЂРєР° РїСЂРѕР№РґРµРЅР° СѓСЃРїРµС€РЅРѕ!\n\n");
-        //assert (prov == 1);
-        }
-
-*/
