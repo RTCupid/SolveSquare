@@ -1,10 +1,43 @@
+
+//! @file    SolveSquare.cpp
+//! @brief   Программа, которая является инструментом
+//!          для решения квадратных уравнений
+
 #include <stdio.h>
 #include <TXLib.h>
 
-#define Accuracy 1e-08                          // точность округления до нуля
+const double Accuracy = 1e-08;                  // точность округления до нуля
 
-int SolveSquare (double a, double b, double c,  // коэффициенты
-                 double *x1, double *x2);       // адреса для решений
+//{
+//! @brief   SolveSquare - решает квадратное уравнение
+//!
+//! @param   a     а   -   первый коэффициент квадратного уравнения
+//! @param   b     b   -   второй коэффициент квадратного уравнения
+//! @param   c     c   -   третий коэффициент квадратного уравнения
+//! @param   &x1   &x1 -   адрес для возврата первого (меньшего) корня квадратного уравнения
+//! @param   &x2   &x2 -   адрес для возврата второго корня квадратного уравнения
+//!
+//! @return  количество корней уравнения, 0, 1, 2 или 8 в случае, если бесконечное количество корней
+//!
+//! @code
+//!     SolveSquare (1, 3, 4, &x1, &x2);
+//! @endcode
+//}
+
+int SolveSquare (double a, double b, double c,  // коэффициенты квадратного уравнения
+                 double *x1, double *x2);       // адреса для корней квадратного уравнения
+
+//{
+//! @brief   функция ввода
+//! @param   double *a - адрес для возврата первого коэффициента квадратного уравнения
+//! @param   double *b - адрес для возврата второго коэффициента квадратного уравнения
+//! @param   double *c - адрес для возврата третьего коэффициента квадратного уравнения
+//! @return  0, если ввод не удачный
+//!          1, если ввод удачный
+//! @code
+//!     Input (&a, &b, &c);
+//! @endcode
+//}
 
 int Input (double *a, double *b, double *c);    // функция ввода
 
@@ -64,9 +97,9 @@ int main ()
 int SolveSquare (double a, double b, double c, double *x1, double *x2)  // решение квадратки
     {
     assert (x1 != x2);
-    /*assert (std: !isNAN (a));
-    assert (std: !isNAN (b));
-    assert (std: !isNAN (c));*/
+    assert (!isnan (a));
+    assert (!isnan (b));
+    assert (!isnan (c));
 
     if (CloseZero(a) && CloseZero(b) && CloseZero(c))    // все коэф==0, беск кол-во решений
         return 8;                                        // magick: rotated infinity
