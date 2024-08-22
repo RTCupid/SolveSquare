@@ -20,7 +20,7 @@ int Compare (double a, double b);               // функция для сравнений двух чи
 
 int main ()
     {
-    printf ("# Program for Solve Square equation\n");
+    printf ("# Program for Solve Square Equation\n");
     printf ("# (с) RTCupid, 2024\n");
 
     RunTests ();                                // программа запускает тесты и проверяет их
@@ -48,7 +48,7 @@ int main ()
             printf ("x = %lg", x1);
             break;
         case 2:
-            printf ("x1 = %lg, x2 = %lg, a = %lg, a = %lg, a = %lg", x1, x2, a, b, c);
+            printf ("x1 = %lg, x2 = %lg", x1, x2);
             break;
         case 8: // вариант: бесконечное кол-во решений, бесконечность = 8 повернуть на 90 градусов
             printf ("x = Any number");
@@ -196,13 +196,14 @@ void RunTests ()
     CheckTest (nTest, 5, -7, 2, 0.4, 1, 2, &prov);
 
     nTest = 11;
-    CheckTest (nTest, 0.0000000000000000001, 1
+    CheckTest (nTest, 0.0000000000000000001, 1, -2, 2, NAN, 1, &prov);
+
     if (prov == 1)
         printf("Verification completed successfully!\n\n");
     //assert (prov == 1);
     }
 
-/*   Runtest версия Деда (более компактно и понятно)
+/*// Runtests () версия Деда (более компактно и понятно)
 void RunTests ()
         {
 
@@ -210,17 +211,18 @@ void RunTests ()
 
         double n = NAN;
 
-        CheckTest ( 1, 0,    0, 0,  n,   n,   8, &prov);
-        CheckTest ( 2, 0,    0, 1,  n,   n,   0, &prov);
-        CheckTest ( 3, 0,    1, 0,  0,   n,   1, &prov);
-        CheckTest ( 4, 0,    1, 1, -1,   n,   1, &prov);
-        CheckTest ( 5, 1,    0, 0,  0,   n,   1, &prov);
-        CheckTest ( 6, 1,    0, 1,  n,   n,   0, &prov);
-        CheckTest ( 7, 1,    1, 0, -1,   0,   2, &prov);
-        CheckTest ( 8, 1,    1, 1,  n,   n,   0, &prov);
-        CheckTest ( 9, 5,    7, 2, -1,  -0.4, 2, &prov);
-        CheckTest (10, 2.5,  7, 4, -2,  -0.8, 2, &prov);
-        CheckTest (11, 5,   -7, 2,  0.4, 1,   2, &prov);
+        CheckTest ( 0, 0,    0, 0,  n,   n,   8, &prov);
+        CheckTest ( 1, 0,    0, 1,  n,   n,   0, &prov);
+        CheckTest ( 2, 0,    1, 0,  0,   n,   1, &prov);
+        CheckTest ( 3, 0,    1, 1, -1,   n,   1, &prov);
+        CheckTest ( 4, 1,    0, 0,  0,   n,   1, &prov);
+        CheckTest ( 5, 1,    0, 1,  n,   n,   0, &prov);
+        CheckTest ( 6, 1,    1, 0, -1,   0,   2, &prov);
+        CheckTest ( 7, 1,    1, 1,  n,   n,   0, &prov);
+        CheckTest ( 8, 5,    7, 2, -1,  -0.4, 2, &prov);
+        CheckTest ( 9, 2.5,  7, 4, -2,  -0.8, 2, &prov);
+        CheckTest (10, 5,   -7, 2,  0.4, 1,   2, &prov);
+        CheckTest (11, 0.0000000000000000001, 1, -2, 2, NAN, 1, &prov);
 
         if (prov == 1)
             printf("Verification completed successfully!\n\n");

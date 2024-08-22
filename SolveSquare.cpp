@@ -20,7 +20,7 @@ int Compare (double a, double b);               // функция для сравнений двух чи
 
 int main ()
     {
-    printf ("# Program for Solve Square equation\n");
+    printf ("# Program for Solve Square Equation\n");
     printf ("# (с) RTCupid, 2024\n");
 
     RunTests ();                                // программа запускает тесты и проверяет их
@@ -203,7 +203,7 @@ void RunTests ()
     //assert (prov == 1);
     }
 
-/*   Runtest версия Деда (более компактно и понятно)
+/*// Runtests () версия Деда (более компактно и понятно)
 void RunTests ()
         {
 
