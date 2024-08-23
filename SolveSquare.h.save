@@ -1,4 +1,15 @@
 
+const double Accuracy = 1e-08;                  // точность округления до нуля
+
+struct OneTest
+    {
+    double a, b, c;
+    double x1Correct, x2Correct;
+    int nanswCorrect;
+    };
+
+const int SS_INF_nansw = 8;
+
 //{
 //! @brief   SolveSquare - решает квадратное уравнение
 //!
@@ -41,8 +52,6 @@ void CheckTest (int nTest, OneTest data, int *prov); //!< функция проверки теста
 int CloseZero (double a);                       //!< функция для сравнения с нулём
 
 int Compare (double a, double b);               //!< функция для сравнений двух чисел с точностью Accuracy
-
-
 
 void output (int nansw, double x1, double x2);  //!< функция вывода ответа взависимости от количества корней
 

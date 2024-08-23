@@ -6,20 +6,9 @@
 //}
 
 #include <stdio.h>
-#include <TXLib.h>
+#include "TXLib.h"
 
-const double Accuracy = 1e-08;                  // точность округления до нуля
-
-struct OneTest
-    {
-    double a, b, c;
-    double x1Correct, x2Correct;
-    int nanswCorrect;
-    };
-
-const int SS_INF_nansw = 8;
-
-#include "RunTests.cpp"
+#include "SolveSquare.h"
 
 int main ()
     {
@@ -161,8 +150,6 @@ void CleanBuf ()
             break;
         }
     }
-
-
 
 // функция обнуляет очень близкие к нулю значения....................................................
 
