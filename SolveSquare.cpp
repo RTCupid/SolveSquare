@@ -60,6 +60,8 @@ int CloseZero (double a);                       //!< функция для сравнения с нул
 
 int Compare (double a, double b);               //!< функция для сравнений двух чисел с точностью Accuracy
 
+void output (int nansw, double x1, double x2);
+
 int main ()
     {
     printf ("# Program for Solve Square Equation\n");
@@ -77,9 +79,18 @@ int main ()
 
     double x1 = NAN, x2 = NAN;                  // решения квадратного уравнения
 
-    int answ = SolveSquare (a, b, c, &x1, &x2); // answ считает количество корней
+    int nansw = SolveSquare (a, b, c, &x1, &x2); // answ считает количество корней
 
-    switch (answ)                               // вывожу ответ в зависимости от количества решений
+    output (nansw, x1, x2);
+
+    return 0;
+    }
+
+// функция выводит ответ взависимости от количества корней...........................................
+
+void output (int nansw, double x1, double x2)
+    {
+    switch (nansw)                               // вывожу ответ в зависимости от количества решений
         {
         case 0:
             printf ("No solutions");
@@ -94,9 +105,8 @@ int main ()
             printf ("x = Any number");
             break;
         default:
-            printf("answ = %d", answ);
+            printf("answ = %d", nansw);
         }
-    return 0;
     }
 
 // функция квадратного уравнения.....................................................................
