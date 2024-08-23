@@ -17,6 +17,8 @@ struct OneTest
     int nanswCorrect;
     };
 
+const int SS_INF_nansw = 8;
+
 //{
 //! @brief   SolveSquare - решает квадратное уравнение
 //!
@@ -54,13 +56,13 @@ void CleanBuf ();                               //!< функция очистки буфера
 
 void RunTests ();                               //!< функция для прогонки тестов
 
-void CheckTest (int nTest, OneTest data, int *prov); // функция проверки теста
+void CheckTest (int nTest, OneTest data, int *prov); //!< функция проверки теста
 
 int CloseZero (double a);                       //!< функция для сравнения с нулём
 
 int Compare (double a, double b);               //!< функция для сравнений двух чисел с точностью Accuracy
 
-void output (int nansw, double x1, double x2);
+void output (int nansw, double x1, double x2);  //!< функция вывода ответа взависимости от количества корней
 
 int main ()
     {
@@ -90,7 +92,7 @@ int main ()
 
 void output (int nansw, double x1, double x2)
     {
-    switch (nansw)                               // вывожу ответ в зависимости от количества решений
+    switch (nansw)
         {
         case 0:
             printf ("No solutions");
@@ -101,7 +103,7 @@ void output (int nansw, double x1, double x2)
         case 2:
             printf ("x1 = %lg, x2 = %lg", x1, x2);
             break;
-        case 8: // вариант: бесконечное кол-во решений, бесконечность = 8 повернуть на 90 градусов
+        case SS_INF_nansw:                       // вариант: бесконечное кол-во решений
             printf ("x = Any number");
             break;
         default:
@@ -119,7 +121,7 @@ int SolveSquare (double a, double b, double c, double *x1, double *x2)  // решен
     assert (!isnan (c));
 
     if (CloseZero(a) && CloseZero(b) && CloseZero(c))    // все коэф==0, беск кол-во решений
-        return 8;                                        // magick: rotated infinity
+        return SS_INF_nansw;                                        // magick: rotated infinity
 
     else if (CloseZero(a) && CloseZero(b))
         return 0;
@@ -203,77 +205,7 @@ void CleanBuf ()
         }
     }
 
-// функция, которая запускает проверку тестов с разными входными данными.............................
-
-/*void RunTests ()
-        {
-
-        int prov = 1;
-
-        double n = NAN;
-        //          nTest  a       b        c   x1Correct x2Correct nansw &prov
-        CheckTest ( 0,     0,      0,       0,  n,        n,        8,    &prov);
-        CheckTest ( 1,     0,      0,       1,  n,        n,        0,    &prov);
-        CheckTest ( 2,     0,      1,       0,  0,        n,        1,    &prov);
-        CheckTest ( 3,     0,      1,       1, -1,        n,        1,    &prov);
-        CheckTest ( 4,     1,      0,       0,  0,        n,        1,    &prov);
-        CheckTest ( 5,     1,      0,       1,  n,        n,        0,    &prov);
-        CheckTest ( 6,     1,      1,       0, -1,        0,        2,    &prov);
-        CheckTest ( 7,     1,      1,       1,  n,        n,        0,    &prov);
-        CheckTest ( 8,     5,      7,       2, -1,       -0.4,      2,    &prov);
-        CheckTest ( 9,     2.5,    7,       4, -2,       -0.8,      2,    &prov);
-        CheckTest (10,     5,     -7,       2,  0.4,      1,        2,    &prov);
-        CheckTest (11,     1e-10,  1,      -2,  2,        n,        1,    &prov);
-
-        if (prov == 1)
-            printf("Verification completed successfully!\n\n")
-        //assert (prov == 1);
-        }
-*/
-
-
-// функция, которая проверяет один тест..............................................................
-
-void CheckTest (int nTest, OneTest data, int *prov)
-    {
-    double x1 = NAN, x2 = NAN;
-    int nansw = SolveSquare (data.a, data.b, data.c, &x1, &x2);
-
-    if (!isnan (x1) && !isnan (x2))
-        {
-        if (!Compare (nansw, data.nanswCorrect) || !Compare(x1, data.x1Correct) || !Compare (x2, data.x2Correct))
-            {
-            txSetConsoleAttr (0x0E);
-
-            printf ("ERROR TEST %d: a = %lg, b = %lg, c = %lg, x1 = %lg, x2 = %lg, nansw = %d\n"
-                    "CORRECT: x1 = %lg, x2 = %lg, nansw = %d\n\n",
-                    nTest, data.a, data.b, data.c, x1, x2, nansw,
-                    data.x1Correct, data.x2Correct, data.nanswCorrect);
-
-                    *prov = 0;
-
-            txSetConsoleAttr (0x07);
-            }
-        }
-
-    else if (isnan (x1) && isnan (x2) && Compare (nansw, data.nanswCorrect))
-        ;
-
-    else if ((isnan (x1) && !Compare (x2, data.x2Correct)) ||
-             (isnan (x2) && !Compare (x1, data.x1Correct)))
-        {
-        txSetConsoleAttr (0x4E);
-
-        printf ("ERROR TEST %d: a = %lg, b = %lg, c = %lg, x1 = %lg, x2 = %lg, nansw = %d\n"
-                    "CORRECT: x1 = %lg, x2 = %lg, nansw = %d\n\n",
-                    nTest, data.a, data.b, data.c, x1, x2, nansw,
-                    data.x1Correct, data.x2Correct, data.nanswCorrect);
-
-                    *prov = 0;
-
-        txSetConsoleAttr (0x07);
-        }
-    }
+#include "RunTests.cpp"
 
 // функция обнуляет очень близкие к нулю значения....................................................
 
@@ -303,36 +235,6 @@ int Compare (double a, double b)
         return 1;
     }
 
-
-void RunTests ()
-    {
-    const int kolTests = 12;
-
-    int prov = 1;
-
-    double n = NAN;
-                                    //a       b        c   x1Correct x2Correct nansw
-    struct OneTest data[kolTests] = {{0,      0,       0,  n,        n,        8    },  //0  тест
-                                     {0,      0,       1,  n,        n,        0    },  //1  тест
-                                     {0,      1,       0,  0,        n,        1    },  //2  тест
-                                     {0,      1,       1, -1,        n,        1    },  //3  тест
-                                     {1,      0,       0,  0,        n,        1    },  //4  тест
-                                     {1,      0,       1,  n,        n,        0    },  //5  тест
-                                     {1,      1,       0, -1,        0,        2    },  //6  тест
-                                     {1,      1,       1,  n,        n,        0    },  //7  тест
-                                     {5,      7,       2, -1,       -0.4,      2    },  //8  тест
-                                     {2.5,    7,       4, -2,       -0.8,      2    },  //9  тест
-                                     {5,     -7,       2,  0.4,      1,        2    },  //10 тест
-                                     {1e-10,  1,      -2,  2,        n,        1    }}; //11 тест
-
-
-    for (int i = 0; i < kolTests; i++)
-        CheckTest (i, data[i], &prov);
-
-
-    if (prov == 1)
-            printf("Verification completed successfully!\n\n");
-    }
 
 
 
