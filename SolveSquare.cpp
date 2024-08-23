@@ -1,12 +1,21 @@
 
+//{
 //! @file    SolveSquare.cpp
 //! @brief   Программа, которая является инструментом
 //!          для решения квадратных уравнений
+//}
 
 #include <stdio.h>
 #include <TXLib.h>
 
 const double Accuracy = 1e-08;                  // точность округления до нуля
+
+struct OneTest
+    {
+    double a, b, c;
+    double x1Correct, x2Correct;
+    int nanswCorrect;
+    };
 
 //{
 //! @brief   SolveSquare - решает квадратное уравнение
@@ -41,15 +50,15 @@ int SolveSquare (double a, double b, double c,  // коэффициенты квадратного урав
 
 int Input (double *a, double *b, double *c);    // функция ввода
 
-void CleanBuf ();                               // функция очистки буфера
+void CleanBuf ();                               //!< функция очистки буфера
 
-void RunTests ();                               // функция для прогонки тестов
+void RunTests ();                               //!< функция для прогонки тестов
 
-void CheckTest (int nTest, double a, double b, double c, double x1Correct, double x2Correct, int nanswCorrect, int *prov); // функция проверки теста
+void CheckTest (int nTest, OneTest data, int *prov); // функция проверки теста
 
-int CloseZero (double a);                       // функция для сравнения с нулём
+int CloseZero (double a);                       //!< функция для сравнения с нулём
 
-int Compare (double a, double b);               // функция для сравнений двух чисел с точностью Accuracy
+int Compare (double a, double b);               //!< функция для сравнений двух чисел с точностью Accuracy
 
 int main ()
     {
@@ -69,8 +78,6 @@ int main ()
     double x1 = NAN, x2 = NAN;                  // решения квадратного уравнения
 
     int answ = SolveSquare (a, b, c, &x1, &x2); // answ считает количество корней
-
-    //assert (std:(!isNAN (x1)));               // выдаст ошибку, если значение x1 не назначается
 
     switch (answ)                               // вывожу ответ в зависимости от количества решений
         {
@@ -109,7 +116,7 @@ int SolveSquare (double a, double b, double c, double *x1, double *x2)  // решен
 
     else if (CloseZero(a))                               // если преобразуется в линейное уравнение
         {
-        *x1 = -c / b;;
+        *x1 = -c / b;
         return 1;
         }
 
@@ -188,99 +195,50 @@ void CleanBuf ()
 
 // функция, которая запускает проверку тестов с разными входными данными.............................
 
-void RunTests ()
-    {
-
-    int prov = 1;
-
-    int nTest = -1;
-
-    nTest = 0;
-    CheckTest (nTest, 0, 0, 0, NAN, NAN, 8, &prov);
-
-    nTest = 1;
-    CheckTest (nTest, 0, 0, 1, NAN, NAN, 0, &prov);
-
-    nTest = 2;
-    CheckTest (nTest, 0, 1, 0, 0, NAN, 1, &prov);
-
-    nTest = 3;
-    CheckTest (nTest, 0, 1, 1, -1, NAN, 1, &prov);
-
-    nTest = 4;
-    CheckTest (nTest, 1, 0, 0, 0, NAN, 1, &prov);
-
-    nTest = 5;
-    CheckTest (nTest, 1, 0, 1, NAN, NAN, 0, &prov);
-
-    nTest = 6;
-    CheckTest (nTest, 1, 1, 0, -1, 0, 2, &prov);
-
-    nTest = 7;
-    CheckTest (nTest, 1, 1, 1, NAN, NAN, 0, &prov);
-
-    nTest = 8;
-    CheckTest (nTest, 5, 7, 2, -1, -0.4, 2, &prov);
-
-    nTest = 9;
-    CheckTest (nTest, 2.5, 7, 4, -2, -0.8, 2, &prov);
-
-    nTest = 10;
-    CheckTest (nTest, 5, -7, 2, 0.4, 1, 2, &prov);
-
-    nTest = 11;
-    CheckTest (nTest, 0.0000000000000000001, 1, -2, 2, NAN, 1, &prov);
-
-    if (prov == 1)
-        printf("Verification completed successfully!\n\n");
-    //assert (prov == 1);
-    }
-
-/*// Runtests () версия Деда (более компактно и понятно)
-void RunTests ()
+/*void RunTests ()
         {
 
         int prov = 1;
 
         double n = NAN;
-
-        CheckTest ( 0, 0,    0, 0,  n,   n,   8, &prov);
-        CheckTest ( 1, 0,    0, 1,  n,   n,   0, &prov);
-        CheckTest ( 2, 0,    1, 0,  0,   n,   1, &prov);
-        CheckTest ( 3, 0,    1, 1, -1,   n,   1, &prov);
-        CheckTest ( 4, 1,    0, 0,  0,   n,   1, &prov);
-        CheckTest ( 5, 1,    0, 1,  n,   n,   0, &prov);
-        CheckTest ( 6, 1,    1, 0, -1,   0,   2, &prov);
-        CheckTest ( 7, 1,    1, 1,  n,   n,   0, &prov);
-        CheckTest ( 8, 5,    7, 2, -1,  -0.4, 2, &prov);
-        CheckTest ( 9, 2.5,  7, 4, -2,  -0.8, 2, &prov);
-        CheckTest (10, 5,   -7, 2,  0.4, 1,   2, &prov);
-        CheckTest (11, 0.0000000000000000001, 1, -2, 2, NAN, 1, &prov);
+        //          nTest  a       b        c   x1Correct x2Correct nansw &prov
+        CheckTest ( 0,     0,      0,       0,  n,        n,        8,    &prov);
+        CheckTest ( 1,     0,      0,       1,  n,        n,        0,    &prov);
+        CheckTest ( 2,     0,      1,       0,  0,        n,        1,    &prov);
+        CheckTest ( 3,     0,      1,       1, -1,        n,        1,    &prov);
+        CheckTest ( 4,     1,      0,       0,  0,        n,        1,    &prov);
+        CheckTest ( 5,     1,      0,       1,  n,        n,        0,    &prov);
+        CheckTest ( 6,     1,      1,       0, -1,        0,        2,    &prov);
+        CheckTest ( 7,     1,      1,       1,  n,        n,        0,    &prov);
+        CheckTest ( 8,     5,      7,       2, -1,       -0.4,      2,    &prov);
+        CheckTest ( 9,     2.5,    7,       4, -2,       -0.8,      2,    &prov);
+        CheckTest (10,     5,     -7,       2,  0.4,      1,        2,    &prov);
+        CheckTest (11,     1e-10,  1,      -2,  2,        n,        1,    &prov);
 
         if (prov == 1)
-            printf("Verification completed successfully!\n\n");
+            printf("Verification completed successfully!\n\n")
         //assert (prov == 1);
         }
-
 */
+
 
 // функция, которая проверяет один тест..............................................................
 
-void CheckTest (int nTest, double a,double b, double c, double x1Correct, double x2Correct, int nanswCorrect, int *prov)
+void CheckTest (int nTest, OneTest data, int *prov)
     {
     double x1 = NAN, x2 = NAN;
-    int nansw = SolveSquare (a, b, c, &x1, &x2);
+    int nansw = SolveSquare (data.a, data.b, data.c, &x1, &x2);
 
     if (!isnan (x1) && !isnan (x2))
         {
-        if (!Compare (nansw, nanswCorrect) || !Compare(x1, x1Correct) || !Compare (x2, x2Correct))
+        if (!Compare (nansw, data.nanswCorrect) || !Compare(x1, data.x1Correct) || !Compare (x2, data.x2Correct))
             {
             txSetConsoleAttr (0x0E);
 
             printf ("ERROR TEST %d: a = %lg, b = %lg, c = %lg, x1 = %lg, x2 = %lg, nansw = %d\n"
                     "CORRECT: x1 = %lg, x2 = %lg, nansw = %d\n\n",
-                    nTest, a, b, c, x1, x2, nansw,
-                    x1Correct, x2Correct, nanswCorrect);
+                    nTest, data.a, data.b, data.c, x1, x2, nansw,
+                    data.x1Correct, data.x2Correct, data.nanswCorrect);
 
                     *prov = 0;
 
@@ -288,19 +246,18 @@ void CheckTest (int nTest, double a,double b, double c, double x1Correct, double
             }
         }
 
-    if (isnan (x1) && isnan (x2) && Compare (nansw, nanswCorrect))
+    else if (isnan (x1) && isnan (x2) && Compare (nansw, data.nanswCorrect))
         ;
 
-    else if ((isnan (x1) && !Compare (x2, x2Correct)) ||
-             (isnan (x2) && !Compare (x1, x1Correct)) ||
-             (!Compare (nansw, nanswCorrect)))
+    else if ((isnan (x1) && !Compare (x2, data.x2Correct)) ||
+             (isnan (x2) && !Compare (x1, data.x1Correct)))
         {
         txSetConsoleAttr (0x4E);
 
         printf ("ERROR TEST %d: a = %lg, b = %lg, c = %lg, x1 = %lg, x2 = %lg, nansw = %d\n"
                     "CORRECT: x1 = %lg, x2 = %lg, nansw = %d\n\n",
-                    nTest, a, b, c, x1, x2, nansw,
-                    x1Correct, x2Correct, nanswCorrect);
+                    nTest, data.a, data.b, data.c, x1, x2, nansw,
+                    data.x1Correct, data.x2Correct, data.nanswCorrect);
 
                     *prov = 0;
 
@@ -326,11 +283,51 @@ int CloseZero (double a)
 
 int Compare (double a, double b)
     {
-    if (a - b >= Accuracy)
+    if (a > 0 && b > 0 && (a - b > Accuracy || b - a > Accuracy))
+        return 0;
+    else if (((a < 0 && b > 0) || (a > 0 && b < 0)) && (fabs(a) > Accuracy || fabs(b) > Accuracy))
+        return 0;
+    else if (a < 0 && b < 0 && (-a + b > Accuracy))
         return 0;
     else
         return 1;
     }
+
+
+void RunTests ()
+    {
+    const int kolTests = 12;
+
+    int prov = 1;
+
+    double n = NAN;
+                                    //a       b        c   x1Correct x2Correct nansw
+    struct OneTest data[kolTests] = {{0,      0,       0,  n,        n,        8    },  //0  тест
+                                     {0,      0,       1,  n,        n,        0    },  //1  тест
+                                     {0,      1,       0,  0,        n,        1    },  //2  тест
+                                     {0,      1,       1, -1,        n,        1    },  //3  тест
+                                     {1,      0,       0,  0,        n,        1    },  //4  тест
+                                     {1,      0,       1,  n,        n,        0    },  //5  тест
+                                     {1,      1,       0, -1,        0,        2    },  //6  тест
+                                     {1,      1,       1,  n,        n,        0    },  //7  тест
+                                     {5,      7,       2, -1,       -0.4,      2    },  //8  тест
+                                     {2.5,    7,       4, -2,       -0.8,      2    },  //9  тест
+                                     {5,     -7,       2,  0.4,      1,        2    },  //10 тест
+                                     {1e-10,  1,      -2,  2,        n,        1    }}; //11 тест
+
+
+    for (int i = 0; i < kolTests; i++)
+        CheckTest (i, data[i], &prov);
+
+
+    if (prov == 1)
+            printf("Verification completed successfully!\n\n");
+    }
+
+
+
+
+
 
 
 
