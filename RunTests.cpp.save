@@ -1,10 +1,5 @@
 
-struct OneTest
-    {
-    double a, b, c;
-    double x1Correct, x2Correct;
-    int nanswCorrect;
-    };
+#include "SolveSquare.h"
 
 // функция, которая запускает проверку тестов с разными входными данными.............................
 

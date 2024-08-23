@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include "TXLib.h"
+#include "SolveSquare.h"
+
 // функция, которая запускает проверку тестов с разными входными данными.............................
 
 void RunTests ()
