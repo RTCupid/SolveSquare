@@ -15,6 +15,8 @@ int main ()
     printf ("# Program for Solve Square Equation\n");
     printf ("# (с) RTCupid, 2024\n");
 
+    StartVerification ();
+
     RunTests ();                                // программа запускает тесты и проверяет их
 
     printf ("# Enter a, b, c\n");

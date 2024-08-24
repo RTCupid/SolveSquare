@@ -45,6 +45,8 @@ int Input (double *a, double *b, double *c);    // функция ввода
 
 void CleanBuf ();                               //!< функция очистки буфера
 
+void StartVerification ();                      //!< функция выводит "verification tests..." на экран
+
 void RunTests ();                               //!< функция для прогонки тестов
 
 void CheckTest (int nTest, OneTest data, int *prov); //!< функция проверки теста

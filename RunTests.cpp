@@ -76,3 +76,12 @@ void CheckTest (int nTest, OneTest data, int *prov)
         txSetConsoleAttr (0x07);
         }
     }
+
+// функция выводит "verification tests..."..............................................................
+
+void StartVerification ()
+    {
+    printf ("Verification tests...\n");
+    }
+
+
