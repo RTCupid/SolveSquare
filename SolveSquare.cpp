@@ -31,31 +31,31 @@ int main ()
 
     int nansw = SolveSquare (a, b, c, &x1, &x2); // answ считает количество корней
 
-    output (nansw, x1, x2);
+    Output (nansw, x1, x2);
 
     return 0;
     }
 
 // функция выводит ответ взависимости от количества корней...........................................
 
-void output (int nansw, double x1, double x2)
+void Output (int nansw, double x1, double x2)
     {
     switch (nansw)
         {
         case 0:
-            printf ("No solutions");
+            printf ("\nNo solutions");
             break;
         case 1:
-            printf ("x = %lg", x1);
+            printf ("\nx = %lg", x1);
             break;
         case 2:
-            printf ("x1 = %lg, x2 = %lg", x1, x2);
+            printf ("\nx1 = %lg, x2 = %lg", x1, x2);
             break;
         case SS_INF_nansw:                       // вариант: бесконечное кол-во решений
-            printf ("x = Any number");
+            printf ("\nx = Any number");
             break;
         default:
-            printf("answ = %d", nansw);
+            printf("\nansw = %d", nansw);
         }
     }
 

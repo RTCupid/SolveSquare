@@ -55,5 +55,5 @@ int CloseZero (double a);                       //!< функция для сравнения с нул
 
 int Compare (double a, double b);               //!< функция для сравнений двух чисел с точностью Accuracy
 
-void output (int nansw, double x1, double x2);  //!< функция вывода ответа взависимости от количества корней
+void Output (int nansw, double x1, double x2);  //!< функция вывода ответа взависимости от количества корней
 
