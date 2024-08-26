@@ -5,10 +5,10 @@ struct OneTest
     {
     double a, b, c;
     double x1Correct, x2Correct;
-    int nanswCorrect;
+    int nAnswCorrect;
     };
 
-const int SS_INF_nansw = 8;
+const int SS_INF_nAnsw = 8;
 
 //{
 //! @brief   SolveSquare - решает квадратное уравнение
@@ -105,7 +105,7 @@ void CheckTest (int nTest, OneTest data, int *prov); // функция проверки теста
 //! @endcode
 //}
 
-int CloseZero (double a);                       //функция для сравнения с нулём
+int IsZero (double a);                       //функция для сравнения с нулём
 
 //{
 //! @brief   функция сравнивает два числа с точностью до Accuracy
@@ -135,5 +135,5 @@ int AreEqual (double a, double b);               // функция для сравнений двух ч
 //! @endcode
 //}
 
-void Output (int nansw, double x1, double x2);  // функция вывода ответа взависимости от количества корней
+void Output (int nAnsw, double x1, double x2);  // функция вывода ответа взависимости от количества корней
 

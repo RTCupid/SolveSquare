@@ -29,18 +29,18 @@ int main ()
 
     double x1 = NAN, x2 = NAN;                  // решения квадратного уравнения
 
-    int nansw = SolveSquare (a, b, c, &x1, &x2); // answ считает количество корней
+    int nAnsw = SolveSquare (a, b, c, &x1, &x2);// nAnsw считает количество корней
 
-    Output (nansw, x1, x2);
+    Output (nAnsw, x1, x2);
 
     return 0;
     }
 
 // функция выводит ответ взависимости от количества корней...........................................
 
-void Output (int nansw, double x1, double x2)
+void Output (int nAnsw, double x1, double x2)
     {
-    switch (nansw)
+    switch (nAnsw)
         {
         case 0:
             printf ("\nNo solutions");
@@ -55,7 +55,7 @@ void Output (int nansw, double x1, double x2)
             printf ("\nx = Any number");
             break;
         default:
-            printf("\nansw = %d", nansw);
+            printf("\nansw = %d", nAnsw);
         }
     }
 
@@ -68,19 +68,19 @@ int SolveSquare (double a, double b, double c, double *x1, double *x2)  // решен
     assert (!isnan (b));
     assert (!isnan (c));
 
-    if (CloseZero(a) && CloseZero(b) && CloseZero(c))    // все коэф==0, беск кол-во решений
-        return SS_INF_nansw;                                        // magick: rotated infinity
+    if (IsZero(a) && IsZero(b) && IsZero(c))     // все коэф==0, беск кол-во решений
+        return SS_INF_nAnsw;                                        
 
-    else if (CloseZero(a) && CloseZero(b))
+    else if (IsZero(a) && IsZero(b))
         return 0;
 
-    else if (CloseZero(a))                               // если преобразуется в линейное уравнение
+    else if (IsZero(a))                           // если преобразуется в линейное уравнение
         {
-        *x1 = -c / b;
+        *x1 = (-c) / b;
         return 1;
         }
 
-    else if ((CloseZero(a) or CloseZero(b)) && CloseZero(c))
+    else if ((IsZero(a) or IsZero(b)) && IsZero(c))
         {
         *x1 = 0;
         return 1;
@@ -91,9 +91,9 @@ int SolveSquare (double a, double b, double c, double *x1, double *x2)  // решен
         if (d < 0)                              // дискриминант < 0, нет решений
             return 0;
 
-        else if (CloseZero(d))                        // дискриминант = 0, одно решение
+        else if (IsZero(d))                        // дискриминант = 0, одно решение
             {
-            *x1 = -b / (2 * a);
+            *x1 = (-b) / (2 * a);
             return 1;
             }
 
@@ -112,10 +112,9 @@ int SolveSquare (double a, double b, double c, double *x1, double *x2)  // решен
 
 int Input (double *a, double *b, double *c)
     {
-    int kol = scanf ("%lg %lg %lg", a, b, c);   // kol считает количество введённых чисел
-
+    int count = scanf ("%lg %lg %lg", a, b, c);   // count считает количество введённых чисел
     int nTries = 2;
-    while (kol != 3)
+    while (count != 3)
         {
         if (nTries == 0)
             {
@@ -129,11 +128,11 @@ int Input (double *a, double *b, double *c)
         printf ("Enter three numbers using the numbers on the keyboard\n");
         printf ("%d attempts left\n", nTries);
 
-        kol = scanf ("%lg %lg %lg", a, b, c);
+        count = scanf ("%lg %lg %lg", a, b, c);
         nTries--;
         }
 
-    if (kol != 3)
+    if (count != 3)
         return 0;
     else
         return 1;                               // неправильный формат входных данных
@@ -155,30 +154,16 @@ void CleanBuf ()
 
 // функция обнуляет очень близкие к нулю значения....................................................
 
-int CloseZero (double a)
+int IsZero (double a)
     {
-    double epsilonPoz =  Accuracy;
-    double epsilonNeg = -Accuracy;
-
-    if ((a < epsilonPoz) && (a > epsilonNeg))
-
-        return 1;
-    else
-        return 0;
+    return fabs(a) < Accuracy;
     }
 
 // функция, которая сравнивает два числа с определённой точностью....................................
 
 int AreEqual (double a, double b)
     {
-    if (a > 0 && b > 0 && (a - b > Accuracy || b - a > Accuracy))
-        return 0;
-    else if (((a < 0 && b > 0) || (a > 0 && b < 0)) && (fabs(a) > Accuracy || fabs(b) > Accuracy))
-        return 0;
-    else if (a < 0 && b < 0 && (-a + b > Accuracy))
-        return 0;
-    else
-        return 1;
+    return fabs (a - b) <= Accuracy;
     }
 
 
