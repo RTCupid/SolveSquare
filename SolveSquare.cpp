@@ -169,7 +169,7 @@ int CloseZero (double a)
 
 // функция, которая сравнивает два числа с определённой точностью....................................
 
-int Compare (double a, double b)
+int AreEqual (double a, double b)
     {
     if (a > 0 && b > 0 && (a - b > Accuracy || b - a > Accuracy))
         return 0;

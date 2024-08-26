@@ -11,7 +11,7 @@ void RunTests ()
     int prov = 1;
 
     double n = NAN;
-                                    //a       b        c   x1Correct x2Correct nansw
+                                    //a       b        c   x1Correct x2Correct nanswCorrect
     struct OneTest data[kolTests] = {{0,      0,       0,  n,        n,        8    },  //0  тест
                                      {0,      0,       1,  n,        n,        0    },  //1  тест
                                      {0,      1,       0,  0,        n,        1    },  //2  тест
@@ -43,7 +43,7 @@ void CheckTest (int nTest, OneTest data, int *prov)
 
     if (!isnan (x1) && !isnan (x2))
         {
-        if (!Compare (nansw, data.nanswCorrect) || !Compare(x1, data.x1Correct) || !Compare (x2, data.x2Correct))
+        if (!AreEqual (nansw, data.nanswCorrect) || !AreEqual(x1, data.x1Correct) || !AreEqual (x2, data.x2Correct))
             {
             txSetConsoleAttr (0x0E);
 
@@ -58,11 +58,11 @@ void CheckTest (int nTest, OneTest data, int *prov)
             }
         }
 
-    else if (isnan (x1) && isnan (x2) && Compare (nansw, data.nanswCorrect))
+    else if (isnan (x1) && isnan (x2) && AreEqual (nansw, data.nanswCorrect))
         ;
 
-    else if ((isnan (x1) && !Compare (x2, data.x2Correct)) ||
-             (isnan (x2) && !Compare (x1, data.x1Correct)))
+    else if ((isnan (x1) && !AreEqual (x2, data.x2Correct)) ||
+             (isnan (x2) && !AreEqual (x1, data.x1Correct)))
         {
         txSetConsoleAttr (0x4E);
 

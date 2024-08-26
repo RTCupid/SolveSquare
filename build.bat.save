@@ -1,0 +1,5 @@
+
+echo Privet
+echo Dobav warnings
+g++ -c RunTests.cpp -o RunTests.o
+

@@ -107,7 +107,33 @@ void CheckTest (int nTest, OneTest data, int *prov); // функция проверки теста
 
 int CloseZero (double a);                       //функция для сравнения с нулём
 
-int Compare (double a, double b);               //!< функция для сравнений двух чисел с точностью Accuracy
+//{
+//! @brief   функция сравнивает два числа с точностью до Accuracy
+//!
+//! @param   a     a   -   первое число
+//! @param   b     b   -   второе число
+//!
+//! @return  1, если числа сравнимы с заданной точностью
+//!          0, если числа не сравнимы с заданной точностью
+//!
+//! @code
+//!          Compare (2, 6);
+//! @endcode
+//}
 
-void Output (int nansw, double x1, double x2);  //!< функция вывода ответа взависимости от количества корней
+int AreEqual (double a, double b);               // функция для сравнений двух чисел с точностью Accuracy
+
+//{
+//! @brief   функция выводит ответ в зависимости от количества корней
+//!
+//! @param   nansw      -   количество корней
+//! @param   x1    x1   -   первый корень
+//! @param   x2    x2   -   второй корень, если есть
+//!
+//! @code
+//!     Output(2, -2, 2);
+//! @endcode
+//}
+
+void Output (int nansw, double x1, double x2);  // функция вывода ответа взависимости от количества корней
 
