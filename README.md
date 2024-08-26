@@ -1,11 +1,13 @@
 # Square equation solver 10000
 
-## How to install
+## What is it?
 
-*sagdhGGrhr*
+*It is the most power Square Solver in the world*
 
+
+## How to run programm?
 ```
 make
 
-uguhuhuhu
+and Enter
 ```
